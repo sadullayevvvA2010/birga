@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIRGA — Birga o‘yna, birga o‘rgan, birga g‘olib bo‘l!</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<nav class="landing-nav">
+  <div class="container flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2">
+      <img src="images/logo.svg" alt="BIRGA" style="width:38px;height:38px;border-radius:10px" />
+      <span style="font-weight:800;font-size:1.35rem">BIRGA</span>
+    </a>
+    <div class="flex items-center gap-2">
+      <button class="btn btn-icon btn-ghost" data-theme-toggle title="Theme">🌙</button>
+      <button class="btn btn-ghost" data-lang="uz">UZ</button>
+      <button class="btn btn-ghost" data-lang="ru">RU</button>
+      <button class="btn btn-ghost" data-lang="en">EN</button>
+      <a class="btn btn-secondary btn-sm" href="login.html" data-i18n="nav.login">Kirish</a>
+      <a class="btn btn-primary btn-sm" href="register.html" data-i18n="nav.register">Ro‘yxatdan o‘tish</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container grid grid-2 items-center" style="align-items:center">
+    <div>
+      <span class="badge badge-primary mb-4">✨ Yangi platforma</span>
+      <h1 data-i18n="landing.tagline" style="margin-bottom:18px">BIRGA — birga o‘yna, birga o‘rgan, birga g‘olib bo‘l!</h1>
+      <p class="text-muted mb-6" data-i18n="landing.desc" style="font-size:1.1rem;max-width:540px">
+        Quizlar, challenge, battle va hamjamiyat — O‘zbekistondagi eng qiziqarli ijtimoiy platforma.
+      </p>
+      <div class="flex gap-3" style="flex-wrap:wrap">
+        <a class="btn btn-primary btn-lg" href="register.html" data-i18n="landing.cta.start">Bepul boshlash</a>
+        <a class="btn btn-secondary btn-lg" href="login.html" data-i18n="landing.cta.login">Kirish</a>
+      </div>
+      <div class="grid grid-3 mt-6" style="max-width:520px;gap:12px">
+        <div class="card card-glass" style="padding:16px">
+          <div style="font-size:1.7rem;font-weight:800" class="text-gradient">12k+</div>
+          <div class="text-muted" style="font-size:.85rem" data-i18n="landing.stats.users">Faol foydalanuvchi</div>
+        </div>
+        <div class="card card-glass" style="padding:16px">
+          <div style="font-size:1.7rem;font-weight:800" class="text-gradient">3.4k+</div>
+          <div class="text-muted" style="font-size:.85rem" data-i18n="landing.stats.quizzes">Yaratilgan quizlar</div>
+        </div>
+        <div class="card card-glass" style="padding:16px">
+          <div style="font-size:1.7rem;font-weight:800" class="text-gradient">1.2k+</div>
+          <div class="text-muted" style="font-size:.85rem" data-i18n="landing.stats.battles">Battle</div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <img src="images/illustrations/hero.svg" alt="Hero" style="max-width:480px;margin:0 auto" />
+    </div>
+  </div>
+</section>
+
+<section class="container" style="padding:60px 24px">
+  <h2 class="text-center mb-6" data-i18n="landing.features">Nega BIRGA?</h2>
+  <div class="grid grid-4">
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:12px">🧠</div>
+      <h4 data-i18n="landing.feature.quiz.title">Quizlar</h4>
+      <p class="text-muted mt-2" data-i18n="landing.feature.quiz.desc">O‘zingiz quiz yarating va do‘stlaringiz bilan bellashing.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:12px">🎯</div>
+      <h4 data-i18n="landing.feature.challenge.title">Challenge</h4>
+      <p class="text-muted mt-2" data-i18n="landing.feature.challenge.desc">Kunlik va haftalik topshiriqlar, XP yig‘ing.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:12px">⚔️</div>
+      <h4 data-i18n="landing.feature.battle.title">Battle</h4>
+      <p class="text-muted mt-2" data-i18n="landing.feature.battle.desc">Raqibingiz bilan 1v1 bilim bellashuvi.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:2rem;margin-bottom:12px">👥</div>
+      <h4 data-i18n="landing.feature.community.title">Hamjamiyat</h4>
+      <p class="text-muted mt-2" data-i18n="landing.feature.community.desc">Qiziqishlaringiz bo‘yicha guruhlarga qo‘shiling.</p>
+    </div>
+  </div>
+</section>
+
+<footer style="padding:40px 0;border-top:1px solid var(--border);text-align:center" class="text-muted">
+  <div class="container">
+    <p>© 2025 BIRGA. Made with ❤️ in Uzbekistan.</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/challenge.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/polls.js"></script>
+<script src="js/stories.js"></script>
+<script src="js/community.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/sharing.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

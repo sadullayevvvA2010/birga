@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Challenge — BIRGA</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="images/logo.svg" alt="" style="width:34px;height:34px;border-radius:10px" />
+      <span>BIRGA</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.dashboard">Boshqaruv</span></a>
+      <a class="nav-item" href="quiz.html"><span class="icon">🧠</span><span data-i18n="nav.quiz">Quizlar</span></a>
+      <a class="nav-item active" href="challenge.html"><span class="icon">🎯</span><span data-i18n="nav.challenge">Challenge</span></a>
+      <a class="nav-item" href="battle.html"><span class="icon">⚔️</span><span data-i18n="nav.battle">Battle</span></a>
+      <a class="nav-item" href="polls.html"><span class="icon">📊</span><span data-i18n="nav.polls">Ovoz berish</span></a>
+      <a class="nav-item" href="stories.html"><span class="icon">✨</span><span data-i18n="nav.stories">Stories</span></a>
+      <a class="nav-item" href="community.html"><span class="icon">👥</span><span data-i18n="nav.community">Hamjamiyat</span></a>
+      <a class="nav-item" href="leaderboard.html"><span class="icon">🏆</span><span data-i18n="nav.leaderboard">Reyting</span></a>
+      <a class="nav-item" href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a>
+      <a class="nav-item" href="notifications.html"><span class="icon">🔔</span><span data-i18n="nav.notifications">Bildirishnomalar</span></a>
+      <a class="nav-item" href="settings.html"><span class="icon">⚙️</span><span data-i18n="nav.settings">Sozlamalar</span></a>
+      <a class="nav-item" href="help.html"><span class="icon">❓</span><span data-i18n="nav.help">Yordam</span></a>
+    </nav>
+    <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="nav-item w-full" data-logout><span class="icon">🚪</span><span data-i18n="nav.logout">Chiqish</span></button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="challenge.title">Challenge</h1>
+      <button class="btn btn-primary" id="createChallengeBtn">➕ Challenge yaratish</button>
+    </div>
+
+    <div class="tabs mb-6">
+      <button class="tab active" data-filter="all" data-i18n="common.all">Barchasi</button>
+      <button class="tab" data-filter="daily" data-i18n="challenge.daily">Kunlik</button>
+      <button class="tab" data-filter="weekly" data-i18n="challenge.weekly">Haftalik</button>
+      <button class="tab" data-filter="mine">Mening</button>
+    </div>
+
+    <div id="challengeGrid" class="grid grid-2"></div>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <ul>
+    <li><a href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.home">Bosh</span></a></li>
+    <li><a href="quiz.html"><span class="icon">🧠</span><span data-i18n="nav.quiz">Quiz</span></a></li>
+    <li><a class="active" href="challenge.html"><span class="icon">🎯</span><span data-i18n="nav.challenge">Challenge</span></a></li>
+    <li><a href="leaderboard.html"><span class="icon">🏆</span><span data-i18n="nav.leaderboard">Reyting</span></a></li>
+    <li><a href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a></li>
+  </ul>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/challenge.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/polls.js"></script>
+<script src="js/stories.js"></script>
+<script src="js/community.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/sharing.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!Auth.requireAuth('login.html')) return;
+    const user = Auth.getCurrent();
+    let filter = 'all';
+
+    function render() {
+      let list = Challenge.all();
+      if (filter !== 'all' && filter !== 'mine') list = list.filter(c => c.type === filter);
+      if (filter === 'mine') list = list.filter(c => c.authorId === user.id);
+
+      const el = document.getElementById('challengeGrid');
+      if (!list.length) {
+        el.innerHTML = `<div class="card text-center" style="grid-column:1/-1;padding:40px">
+          <img src="images/illustrations/empty.svg" alt="" style="width:120px;margin:0 auto 16px" />
+          <p class="text-muted">${t('common.empty')}</p>
+        </div>`;
+        return;
+      }
+
+      el.innerHTML = list.map(c => {
+        const p = Challenge.participation()[c.id];
+        const joined = !!p;
+        const completed = p?.completed;
+        const expired = c.expiresAt && new Date(c.expiresAt) < new Date();
+        const typeLabel = c.type === 'daily' ? t('challenge.daily') : t('challenge.weekly');
+        const typeClass = c.type === 'daily' ? 'badge-accent' : 'badge-primary';
+
+        return `
+          <div class="card">
+            <div class="flex justify-between items-start gap-2 mb-2">
+              <span class="badge ${typeClass}">${typeLabel}</span>
+              ${expired ? `<span class="badge badge-warning">Tugagan</span>` : ''}
+            </div>
+            <h4 class="mb-2">${UI.escapeHtml(c.title)}</h4>
+            <p class="text-muted mb-3" style="font-size:.9rem">${UI.escapeHtml(c.description || '')}</p>
+            <div class="flex justify-between items-center">
+              <span class="badge badge-success">+${c.xp} XP</span>
+              ${completed
+                ? `<span class="badge badge-success">✓ ${t('challenge.completed')}</span>`
+                : joined
+                  ? `<button class="btn btn-primary btn-sm" data-complete="${c.id}">✓ ${t('challenge.completed')}</button>`
+                  : `<button class="btn btn-primary btn-sm" data-join="${c.id}" ${expired ? 'disabled' : ''}>${t('challenge.join')}</button>`
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      el.querySelectorAll('[data-join]').forEach(b => {
+        b.onclick = () => {
+          Challenge.join(b.getAttribute('data-join'));
+          UI.toast('Challengega qo‘shildingiz!', 'success');
+          render();
+        };
+      });
+      el.querySelectorAll('[data-complete]').forEach(b => {
+        b.onclick = () => {
+          const ok = Challenge.complete(b.getAttribute('data-complete'));
+          if (ok) { UI.toast('Challenge bajarildi! ✓', 'success'); render(); }
+        };
+      });
+    }
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+        tab.classList.add('active');
+        filter = tab.getAttribute('data-filter');
+        render();
+      };
+    });
+
+    document.getElementById('createChallengeBtn').onclick = () => {
+      UI.modal('Yangi challenge', `
+        <div class="form-group mb-3">
+          <label class="form-label">Sarlavha</label>
+          <input class="input" id="ct" maxlength="80" />
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label">Tavsif</label>
+          <textarea class="textarea" id="cd" maxlength="200"></textarea>
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label">Turi</label>
+          <select class="select" id="ctype">
+            <option value="daily">${t('challenge.daily')}</option>
+            <option value="weekly">${t('challenge.weekly')}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">XP</label>
+          <input class="input" id="cxp" type="number" min="10" max="500" value="40" />
+        </div>
+      `, (overlay) => {
+        const title = overlay.querySelector('#ct').value.trim();
+        const desc = overlay.querySelector('#cd').value.trim();
+        const type = overlay.querySelector('#ctype').value;
+        const xp = Number(overlay.querySelector('#cxp').value) || 40;
+        if (!title) { UI.toast('Sarlavha bo‘sh', 'error'); return; }
+        Challenge.create({ title, description: desc, type, xp });
+        overlay.remove();
+        UI.toast('Challenge yaratildi!', 'success');
+        render();
+      }, t('common.create'));
+    };
+
+    render();
+  });
+</script>
+</body>
+</html>

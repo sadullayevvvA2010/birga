@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ro‘yxatdan o‘tish — BIRGA</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    .auth-wrap { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
+    .auth-visual {
+      background: radial-gradient(circle at 30% 30%, rgba(121,87,255,.35), transparent 60%),
+                  radial-gradient(circle at 80% 70%, rgba(34,211,238,.25), transparent 60%),
+                  var(--surface);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 60px; border-right: 1px solid var(--border);
+    }
+    .auth-form-side { display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+    .auth-form-box { width: 100%; max-width: 460px; }
+    @media (max-width: 900px) {
+      .auth-wrap { grid-template-columns: 1fr; }
+      .auth-visual { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-visual">
+    <a href="index.html" class="flex items-center gap-2 mb-6">
+      <img src="images/logo.svg" alt="BIRGA" style="width:42px;height:42px;border-radius:12px" />
+      <span style="font-weight:800;font-size:1.5rem">BIRGA</span>
+    </a>
+    <h2 class="mb-4">BIRGA jamoasiga qo‘shiling</h2>
+    <p class="text-muted" style="max-width:420px">
+      Ro‘yxatdan o‘tib, XP yig‘ing, reytingda ko‘tariling va do‘stlaringiz bilan bellashing.
+    </p>
+    <img src="images/illustrations/trophy.svg" alt="" style="max-width:260px;margin-top:32px;opacity:.9" />
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form-box">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h1 class="mb-2" data-i18n="auth.register.title">Ro‘yxatdan o‘tish</h1>
+          <p class="text-muted" data-i18n="auth.register.subtitle">BIRGA jamoasiga qo‘shiling</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-icon btn-ghost" data-theme-toggle>🌙</button>
+          <button class="btn btn-ghost btn-sm" data-lang="uz">UZ</button>
+          <button class="btn btn-ghost btn-sm" data-lang="ru">RU</button>
+          <button class="btn btn-ghost btn-sm" data-lang="en">EN</button>
+        </div>
+      </div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-group mb-4">
+          <label class="form-label" for="name" data-i18n="auth.register.name">To‘liq ism</label>
+          <input class="input" id="name" name="name" type="text" autocomplete="name" />
+        </div>
+        <div class="form-group mb-4">
+          <label class="form-label" for="username" data-i18n="auth.register.username">Username</label>
+          <input class="input" id="username" name="username" type="text" autocomplete="username" />
+        </div>
+        <div class="form-group mb-4">
+          <label class="form-label" for="email" data-i18n="auth.register.email">Email</label>
+          <input class="input" id="email" name="email" type="email" autocomplete="email" />
+        </div>
+        <div class="form-group mb-4">
+          <label class="form-label" for="password" data-i18n="auth.register.password">Parol</label>
+          <input class="input" id="password" name="password" type="password" autocomplete="new-password" />
+        </div>
+        <div class="form-group mb-6">
+          <label class="form-label" for="confirm" data-i18n="auth.register.confirm">Parolni tasdiqlang</label>
+          <input class="input" id="confirm" name="confirm" type="password" autocomplete="new-password" />
+        </div>
+
+        <button class="btn btn-primary w-full btn-lg mb-4" type="submit" data-i18n="auth.register.btn">Ro‘yxatdan o‘tish</button>
+
+        <div class="text-center text-muted">
+          <span data-i18n="auth.register.hasaccount">Hisobingiz bormi?</span>
+          <a href="login.html" style="color:var(--secondary);font-weight:600" data-i18n="nav.login">Kirish</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/challenge.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/polls.js"></script>
+<script src="js/stories.js"></script>
+<script src="js/community.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/sharing.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (Auth.isLoggedIn()) location.href = 'dashboard.html';
+
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      Validation.clearAll(form);
+      const data = {
+        name: form.name.value.trim(),
+        username: form.username.value.trim(),
+        email: form.email.value.trim(),
+        password: form.password.value,
+        confirm: form.confirm.value,
+      };
+      const errors = Validation.validateRegister(data);
+      if (Object.keys(errors).length) {
+        Object.entries(errors).forEach(([key, msg]) => {
+          if (form[key]) Validation.showError(form[key], msg);
+        });
+        return;
+      }
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      const res = await Auth.register(data);
+      btn.disabled = false;
+      if (!res.ok) {
+        UI.toast(res.error, 'error');
+        Validation.showError(form.username, res.error);
+        return;
+      }
+      UI.toast(t('auth.success.register'), 'success');
+      setTimeout(() => location.href = 'dashboard.html', 600);
+    });
+  });
+</script>
+</body>
+</html>

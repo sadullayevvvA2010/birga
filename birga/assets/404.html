@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — BIRGA</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    .err-wrap {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center; padding: 40px 16px;
+      background: radial-gradient(circle at 50% 50%, rgba(121,87,255,.2), transparent 60%);
+    }
+    .err-code {
+      font-size: 8rem; font-weight: 900; line-height: 1;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media (max-width: 600px) { .err-code { font-size: 5rem; } }
+  </style>
+</head>
+<body>
+  <div class="err-wrap">
+    <img src="images/logo.svg" alt="BIRGA" style="width:60px;height:60px;border-radius:16px;margin-bottom:24px" />
+    <div class="err-code">404</div>
+    <h1 class="mb-3" data-i18n="404.title">Sahifa topilmadi</h1>
+    <p class="text-muted mb-6" data-i18n="404.desc" style="max-width:400px">Kechirasiz, siz izlagan sahifa mavjud emas.</p>
+    <a class="btn btn-primary btn-lg" href="index.html" data-i18n="404.back">Bosh sahifaga qaytish</a>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    UI.initTheme();
+    I18N.init();
+  </script>
+</body>
+</html>

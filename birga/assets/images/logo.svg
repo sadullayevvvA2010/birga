@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="BIRGA logo">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#0f172a"/>
+  <rect x="10" y="10" width="108" height="108" rx="24" fill="url(#g1)" opacity="0.9"/>
+  <path d="M40 32h28a20 20 0 0 1 0 40H40v-40zm0 48h32a20 20 0 0 1 0 40H40V80z" fill="#f8fafc" opacity="0.96"/>
+  <path d="M68 32h18a20 20 0 0 1 0 40H68V32zm0 48h22a20 20 0 0 1 0 40H68V80z" fill="#e2e8f0" opacity="0.7"/>
+</svg>

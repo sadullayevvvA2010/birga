@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Battle — BIRGA</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    .battle-wrap { max-width: 780px; margin: 0 auto; padding: 32px 16px; }
+    .battle-scoreboard {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px;
+      align-items: center; margin-bottom: 24px;
+    }
+    .player-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; text-align: center; }
+    .player-card.active { border-color: var(--primary); box-shadow: 0 0 20px rgba(121,87,255,.3); }
+    .vs { font-size: 1.6rem; font-weight: 800; color: var(--primary); }
+    .answer-btn {
+      display: block; width: 100%; text-align: left;
+      padding: 16px 20px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 14px;
+      margin-bottom: 12px; font-weight: 600; cursor: pointer;
+      transition: all .2s;
+    }
+    .answer-btn:hover { background: var(--surface-2); }
+    .answer-btn.correct { background: rgba(16,185,129,.15); border-color: var(--success); }
+    .answer-btn.wrong { background: rgba(239,68,68,.15); border-color: var(--danger); }
+    .answer-btn:disabled { cursor: default; }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="images/logo.svg" alt="" style="width:34px;height:34px;border-radius:10px" />
+      <span>BIRGA</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.dashboard">Boshqaruv</span></a>
+      <a class="nav-item" href="quiz.html"><span class="icon">🧠</span><span data-i18n="nav.quiz">Quizlar</span></a>
+      <a class="nav-item" href="challenge.html"><span class="icon">🎯</span><span data-i18n="nav.challenge">Challenge</span></a>
+      <a class="nav-item active" href="battle.html"><span class="icon">⚔️</span><span data-i18n="nav.battle">Battle</span></a>
+      <a class="nav-item" href="polls.html"><span class="icon">📊</span><span data-i18n="nav.polls">Ovoz berish</span></a>
+      <a class="nav-item" href="stories.html"><span class="icon">✨</span><span data-i18n="nav.stories">Stories</span></a>
+      <a class="nav-item" href="community.html"><span class="icon">👥</span><span data-i18n="nav.community">Hamjamiyat</span></a>
+      <a class="nav-item" href="leaderboard.html"><span class="icon">🏆</span><span data-i18n="nav.leaderboard">Reyting</span></a>
+      <a class="nav-item" href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a>
+      <a class="nav-item" href="notifications.html"><span class="icon">🔔</span><span data-i18n="nav.notifications">Bildirishnomalar</span></a>
+      <a class="nav-item" href="settings.html"><span class="icon">⚙️</span><span data-i18n="nav.settings">Sozlamalar</span></a>
+      <a class="nav-item" href="help.html"><span class="icon">❓</span><span data-i18n="nav.help">Yordam</span></a>
+    </nav>
+    <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="nav-item w-full" data-logout><span class="icon">🚪</span><span data-i18n="nav.logout">Chiqish</span></button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="battle-wrap">
+      <div id="battleArea"></div>
+    </div>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <ul>
+    <li><a href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.home">Bosh</span></a></li>
+    <li><a href="quiz.html"><span class="icon">🧠</span><span data-i18n="nav.quiz">Quiz</span></a></li>
+    <li><a class="active" href="battle.html"><span class="icon">⚔️</span><span data-i18n="nav.battle">Battle</span></a></li>
+    <li><a href="leaderboard.html"><span class="icon">🏆</span><span data-i18n="nav.leaderboard">Reyting</span></a></li>
+    <li><a href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a></li>
+  </ul>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/challenge.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/polls.js"></script>
+<script src="js/stories.js"></script>
+<script src="js/community.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/sharing.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!Auth.requireAuth('login.html')) return;
+    const user = Auth.getCurrent();
+    const area = document.getElementById('battleArea');
+
+    function showLobby() {
+      Battle.clear();
+      const quizzes = Quiz.all();
+      if (!quizzes.length) {
+        area.innerHTML = `<div class="card text-center">
+          <h3>Hozircha quizlar yo‘q</h3>
+          <p class="text-muted mt-2">Battle uchun kamida bitta quiz kerak</p>
+          <a class="btn btn-primary mt-4" href="create-quiz.html">Quiz yaratish</a>
+        </div>`;
+        return;
+      }
+      area.innerHTML = `
+        <div class="card text-center mb-6">
+          <h1 class="mb-3">⚔️ ${t('battle.title')}</h1>
+          <p class="text-muted mb-6">Raqibingiz bilan 1v1 bellashing!</p>
+          <div class="form-group mb-4" style="max-width:400px;margin:0 auto">
+            <label class="form-label">Quizni tanlang</label>
+            <select class="select" id="battleQuizSelect">
+              ${quizzes.map(q => `<option value="${q.id}">${UI.escapeHtml(q.title)} (${q.questions.length} savol)</option>`).join('')}
+            </select>
+          </div>
+          <button class="btn btn-primary btn-lg" id="startBattleBtn">${t('battle.start')}</button>
+        </div>
+      `;
+      document.getElementById('startBattleBtn').onclick = () => {
+        const id = document.getElementById('battleQuizSelect').value;
+        const quiz = Quiz.get(id);
+        if (!quiz) return;
+        Battle.start(quiz);
+        showBattle();
+      };
+    }
+
+    function showBattle() {
+      const s = Battle.getState();
+      if (!s) return showLobby();
+      const q = s.questions[s.current];
+      if (!q) return showResult();
+      const total = s.questions.length;
+      const prog = (s.current / total) * 100;
+
+      area.innerHTML = `
+        <div class="battle-scoreboard">
+          <div class="player-card active">
+            <div style="font-size:2rem">🧑</div>
+            <div style="font-weight:700">${UI.escapeHtml(user.name)}</div>
+            <div class="text-gradient" style="font-size:1.5rem;font-weight:800">${s.youScore}</div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="player-card">
+            <div style="font-size:2rem">🤖</div>
+            <div style="font-weight:700">${t('battle.opponent')}</div>
+            <div class="text-gradient" style="font-size:1.5rem;font-weight:800">${s.oppScore}</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="flex justify-between items-center mb-3">
+            <span class="badge badge-primary">${s.current + 1} / ${total}</span>
+            <span class="badge badge-accent">${t('battle.your_turn')}</span>
+          </div>
+          <div class="progress mb-4"><div class="progress-bar" style="width:${prog}%"></div></div>
+          <div class="question-title" style="font-size:1.25rem;font-weight:700;margin-bottom:20px">${UI.escapeHtml(q.text)}</div>
+          ${q.answers.map((a, i) => `<button class="answer-btn" data-i="${i}">${UI.escapeHtml(a)}</button>`).join('')}
+        </div>
+      `;
+
+      area.querySelectorAll('.answer-btn').forEach(btn => {
+        btn.onclick = () => {
+          const idx = Number(btn.getAttribute('data-i'));
+          const res = Battle.answer(idx);
+          area.querySelectorAll('.answer-btn').forEach((b, i) => {
+            b.disabled = true;
+            if (i === q.correct) b.classList.add('correct');
+            else if (i === idx) b.classList.add('wrong');
+          });
+          if (res.done) setTimeout(showResult, 900);
+          else setTimeout(showBattle, 900);
+        };
+      });
+    }
+
+    function showResult() {
+      const final = Battle.finish();
+      if (!final) return showLobby();
+      const resultText = final.result === 'win' ? t('battle.win')
+        : final.result === 'lose' ? t('battle.lose') : t('battle.draw');
+      const emoji = final.result === 'win' ? '🏆' : final.result === 'lose' ? '💪' : '🤝';
+      const color = final.result === 'win' ? 'var(--success)' : final.result === 'lose' ? 'var(--danger)' : 'var(--warning)';
+      area.innerHTML = `
+        <div class="card text-center">
+          <div style="font-size:4rem">${emoji}</div>
+          <h1 class="mb-3" style="color:${color}">${resultText}</h1>
+          <div class="battle-scoreboard">
+            <div class="player-card">
+              <div style="font-size:2rem">🧑</div>
+              <div style="font-weight:700">${t('battle.you')}</div>
+              <div class="text-gradient" style="font-size:1.8rem;font-weight:800">${final.youScore}</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="player-card">
+              <div style="font-size:2rem">🤖</div>
+              <div style="font-weight:700">${t('battle.opponent')}</div>
+              <div class="text-gradient" style="font-size:1.8rem;font-weight:800">${final.oppScore}</div>
+            </div>
+          </div>
+          <div class="grid gap-2 mt-6" style="max-width:400px;margin:24px auto 0">
+            <button class="btn btn-primary" id="againBtn">🔄 ${t('battle.again')}</button>
+            <button class="btn btn-ghost" id="lobbyBtn">← ${t('common.back')}</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('againBtn').onclick = () => {
+        const quiz = final.quiz;
+        Battle.start(quiz);
+        showBattle();
+      };
+      document.getElementById('lobbyBtn').onclick = showLobby;
+    }
+
+    showLobby();
+  });
+</script>
+</body>
+</html>

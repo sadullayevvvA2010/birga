@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sozlamalar — BIRGA</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    .setting-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+    }
+    .setting-row:last-child { border-bottom: none; }
+    .switch {
+      position: relative; width: 52px; height: 28px;
+      background: var(--surface-2); border-radius: 999px;
+      cursor: pointer; transition: all .3s; border: 1px solid var(--border);
+    }
+    .switch::after {
+      content: ''; position: absolute; top: 2px; left: 2px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--text); transition: all .3s;
+    }
+    .switch.on { background: var(--primary); }
+    .switch.on::after { left: 26px; background: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="images/logo.svg" alt="" style="width:34px;height:34px;border-radius:10px" />
+      <span>BIRGA</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.dashboard">Boshqaruv</span></a>
+      <a class="nav-item" href="quiz.html"><span class="icon">🧠</span><span data-i18n="nav.quiz">Quizlar</span></a>
+      <a class="nav-item" href="challenge.html"><span class="icon">🎯</span><span data-i18n="nav.challenge">Challenge</span></a>
+      <a class="nav-item" href="battle.html"><span class="icon">⚔️</span><span data-i18n="nav.battle">Battle</span></a>
+      <a class="nav-item" href="polls.html"><span class="icon">📊</span><span data-i18n="nav.polls">Ovoz berish</span></a>
+      <a class="nav-item" href="stories.html"><span class="icon">✨</span><span data-i18n="nav.stories">Stories</span></a>
+      <a class="nav-item" href="community.html"><span class="icon">👥</span><span data-i18n="nav.community">Hamjamiyat</span></a>
+      <a class="nav-item" href="leaderboard.html"><span class="icon">🏆</span><span data-i18n="nav.leaderboard">Reyting</span></a>
+      <a class="nav-item" href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a>
+      <a class="nav-item" href="notifications.html"><span class="icon">🔔</span><span data-i18n="nav.notifications">Bildirishnomalar</span></a>
+      <a class="nav-item active" href="settings.html"><span class="icon">⚙️</span><span data-i18n="nav.settings">Sozlamalar</span></a>
+      <a class="nav-item" href="help.html"><span class="icon">❓</span><span data-i18n="nav.help">Yordam</span></a>
+    </nav>
+    <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="nav-item w-full" data-logout><span class="icon">🚪</span><span data-i18n="nav.logout">Chiqish</span></button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1 class="page-title" data-i18n="settings.title">Sozlamalar</h1>
+    </div>
+
+    <div class="grid" style="gap:20px;max-width:720px">
+      <div class="card">
+        <h3 class="mb-3" data-i18n="settings.appearance">Ko‘rinish</h3>
+        <div class="setting-row">
+          <div>
+            <div style="font-weight:600" data-i18n="settings.theme">Mavzu</div>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-sm" data-set-theme="dark" data-i18n="settings.theme.dark">Tungi</button>
+            <button class="btn btn-sm" data-set-theme="light" data-i18n="settings.theme.light">Kunduzgi</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div style="font-weight:600" data-i18n="settings.lang">Til</div>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn btn-sm" data-lang="uz">UZ</button>
+            <button class="btn btn-sm" data-lang="ru">RU</button>
+            <button class="btn btn-sm" data-lang="en">EN</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="mb-3" data-i18n="settings.privacy">Maxfiylik</h3>
+        <div class="setting-row">
+          <div style="font-weight:600" data-i18n="settings.privacy.profile">Profilni yopiq qilish</div>
+          <div class="switch" data-toggle="privacyProfile"></div>
+        </div>
+        <div class="setting-row">
+          <div style="font-weight:600" data-i18n="settings.privacy.notif">Bildirishnomalarni o‘chirish</div>
+          <div class="switch" data-toggle="privacyNotif"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="mb-3" data-i18n="settings.account">Hisob</h3>
+        <button class="btn btn-danger w-full" id="deleteAccountBtn">🗑 <span data-i18n="settings.account.delete">Hisobni o‘chirish</span></button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <ul>
+    <li><a href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.home">Bosh</span></a></li>
+    <li><a href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a></li>
+    <li><a href="notifications.html"><span class="icon">🔔</span><span data-i18n="nav.notifications">Bild</span></a></li>
+    <li><a href="help.html"><span class="icon">❓</span><span data-i18n="nav.help">Yordam</span></a></li>
+    <li><a class="active" href="settings.html"><span class="icon">⚙️</span><span data-i18n="nav.settings">Sozlama</span></a></li>
+  </ul>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/challenge.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/polls.js"></script>
+<script src="js/stories.js"></script>
+<script src="js/community.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/sharing.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!Auth.requireAuth('login.html')) return;
+
+    document.querySelectorAll('[data-set-theme]').forEach(b => {
+      b.onclick = () => {
+        UI.applyTheme(b.getAttribute('data-set-theme'));
+        UI.toast(t('settings.saved'), 'success');
+      };
+    });
+
+    const settings = Storage.get('settings', { privacyProfile: false, privacyNotif: false });
+
+    document.querySelectorAll('[data-toggle]').forEach(sw => {
+      const key = sw.getAttribute('data-toggle');
+      if (settings[key]) sw.classList.add('on');
+      sw.onclick = () => {
+        settings[key] = !settings[key];
+        sw.classList.toggle('on', settings[key]);
+        Storage.set('settings', settings);
+      };
+    });
+
+    document.getElementById('deleteAccountBtn').onclick = () => {
+      UI.modal('⚠️ ' + t('settings.account.delete'), `<p>${t('settings.account.delete.confirm')}</p>`, () => {
+        Storage.clearAll();
+        location.href = 'index.html';
+      }, t('common.delete'));
+    };
+  });
+</script>
+</body>
+</html>

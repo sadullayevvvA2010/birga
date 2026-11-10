@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil — BIRGA</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    .profile-header {
+      background: linear-gradient(135deg, rgba(121,87,255,.2), rgba(34,211,238,.1)), var(--surface);
+      border-radius: 22px; padding: 40px 32px; border: 1px solid var(--border);
+      text-align: center; margin-bottom: 24px;
+    }
+    .profile-header .avatar { margin: 0 auto 16px; }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="images/logo.svg" alt="" style="width:34px;height:34px;border-radius:10px" />
+      <span>BIRGA</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.dashboard">Boshqaruv</span></a>
+      <a class="nav-item" href="quiz.html"><span class="icon">🧠</span><span data-i18n="nav.quiz">Quizlar</span></a>
+      <a class="nav-item" href="challenge.html"><span class="icon">🎯</span><span data-i18n="nav.challenge">Challenge</span></a>
+      <a class="nav-item" href="battle.html"><span class="icon">⚔️</span><span data-i18n="nav.battle">Battle</span></a>
+      <a class="nav-item" href="polls.html"><span class="icon">📊</span><span data-i18n="nav.polls">Ovoz berish</span></a>
+      <a class="nav-item" href="stories.html"><span class="icon">✨</span><span data-i18n="nav.stories">Stories</span></a>
+      <a class="nav-item" href="community.html"><span class="icon">👥</span><span data-i18n="nav.community">Hamjamiyat</span></a>
+      <a class="nav-item" href="leaderboard.html"><span class="icon">🏆</span><span data-i18n="nav.leaderboard">Reyting</span></a>
+      <a class="nav-item active" href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a>
+      <a class="nav-item" href="notifications.html"><span class="icon">🔔</span><span data-i18n="nav.notifications">Bildirishnomalar</span></a>
+      <a class="nav-item" href="settings.html"><span class="icon">⚙️</span><span data-i18n="nav.settings">Sozlamalar</span></a>
+      <a class="nav-item" href="help.html"><span class="icon">❓</span><span data-i18n="nav.help">Yordam</span></a>
+    </nav>
+    <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="nav-item w-full" data-logout><span class="icon">🚪</span><span data-i18n="nav.logout">Chiqish</span></button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="profile-header">
+      <img class="avatar avatar-lg" id="profileAvatar" src="images/avatars/default.svg" alt="" />
+      <h1 id="profileName">Foydalanuvchi</h1>
+      <p class="text-muted" id="profileUsername">@user</p>
+      <p id="profileBio" class="mt-2" style="max-width:480px;margin:0 auto"></p>
+      <div class="flex gap-2 justify-center mt-4">
+        <button class="btn btn-primary" id="editProfileBtn">✏️ <span data-i18n="profile.edit">Profilni tahrirlash</span></button>
+      </div>
+      <div class="grid grid-4 mt-6" style="max-width:600px;margin-left:auto;margin-right:auto">
+        <div><div style="font-weight:800;font-size:1.5rem" class="text-gradient" id="statXP">0</div><div class="text-muted" style="font-size:.85rem">XP</div></div>
+        <div><div style="font-weight:800;font-size:1.5rem" class="text-gradient" id="statLevel">1</div><div class="text-muted" style="font-size:.85rem">Level</div></div>
+        <div><div style="font-weight:800;font-size:1.5rem" class="text-gradient" id="statQuizzes">0</div><div class="text-muted" style="font-size:.85rem">Quizlar</div></div>
+        <div><div style="font-weight:800;font-size:1.5rem" class="text-gradient" id="statPosts">0</div><div class="text-muted" style="font-size:.85rem">Postlar</div></div>
+      </div>
+      <div class="mt-4" style="max-width:400px;margin:20px auto 0">
+        <div class="progress"><div class="progress-bar" id="levelProgress" style="width:0%"></div></div>
+        <p class="text-muted mt-2" style="font-size:.8rem" id="levelText">Level 1</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <section>
+        <h3 class="mb-3" data-i18n="profile.badges">Badges</h3>
+        <div class="card" id="badgesList"></div>
+      </section>
+      <section>
+        <h3 class="mb-3" data-i18n="profile.quizzes">Quizlar</h3>
+        <div id="myQuizzes"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <ul>
+    <li><a href="dashboard.html"><span class="icon">🏠</span><span data-i18n="nav.home">Bosh</span></a></li>
+    <li><a href="quiz.html"><span class="icon">🧠</span><span data-i18n="nav.quiz">Quiz</span></a></li>
+    <li><a href="leaderboard.html"><span class="icon">🏆</span><span data-i18n="nav.leaderboard">Reyting</span></a></li>
+    <li><a href="community.html"><span class="icon">👥</span><span data-i18n="nav.community">Hamjamiyat</span></a></li>
+    <li><a class="active" href="profile.html"><span class="icon">👤</span><span data-i18n="nav.profile">Profil</span></a></li>
+  </ul>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/challenge.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/polls.js"></script>
+<script src="js/stories.js"></script>
+<script src="js/community.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/sharing.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!Auth.requireAuth('login.html')) return;
+
+    const BADGE_NAMES = {
+      'first-quiz': '🎯 Birinchi quiz',
+      'perfect-quiz': '💯 Perfect Quiz',
+      'challenger': '🔥 Challenger',
+      'first-battle': '⚔️ Birinchi battle',
+      'battle-winner': '🏆 Battle g‘olibi',
+      'active-user': '⭐ Faol foydalanuvchi',
+    };
+
+    function render() {
+      const user = Auth.getCurrent();
+      if (!user) return;
+      document.getElementById('profileAvatar').src = user.avatar || 'images/avatars/default.svg';
+      document.getElementById('profileName').textContent = user.name;
+      document.getElementById('profileUsername').textContent = '@' + user.username;
+      document.getElementById('profileBio').textContent = user.bio || 'Bio qo‘shilmagan';
+
+      const st = Profile.stats();
+      document.getElementById('statXP').textContent = st.xp;
+      document.getElementById('statLevel').textContent = st.level;
+      document.getElementById('statQuizzes').textContent = st.quizzes;
+      document.getElementById('statPosts').textContent = st.posts;
+
+      const pct = Gamification.levelProgress(user.xp || 0);
+      document.getElementById('levelProgress').style.width = pct + '%';
+      document.getElementById('levelText').textContent = `Level ${user.level || 1} — ${pct}%`;
+
+      const badgesEl = document.getElementById('badgesList');
+      const badges = user.badges || [];
+      if (!badges.length) {
+        badgesEl.innerHTML = `<p class="text-muted text-center">Hozircha badge yo‘q</p>`;
+      } else {
+        badgesEl.innerHTML = badges.map(b => `
+          <span class="badge badge-primary" style="margin:4px">${BADGE_NAMES[b] || b}</span>
+        `).join('');
+      }
+
+      const quizzes = Quiz.all().filter(q => q.authorId === user.id);
+      const qEl = document.getElementById('myQuizzes');
+      if (!quizzes.length) {
+        qEl.innerHTML = `<div class="card text-center text-muted">${t('common.empty')}</div>`;
+      } else {
+        qEl.innerHTML = quizzes.map(q => `
+          <a class="card mb-2" href="quiz-play.html?id=${encodeURIComponent(q.id)}">
+            <div class="flex justify-between items-center">
+              <div>
+                <div style="font-weight:700">${UI.escapeHtml(q.title)}</div>
+                <div class="text-muted" style="font-size:.82rem">${q.questions.length} ${t('quiz.questions')} · ${q.plays || 0} ${t('quiz.taken')}</div>
+              </div>
+              <span class="badge badge-accent">${t('quiz.play')}</span>
+            </div>
+          </a>
+        `).join('');
+      }
+    }
+
+    document.getElementById('editProfileBtn').onclick = () => {
+      const user = Auth.getCurrent();
+      UI.modal(t('profile.edit'), `
+        <div class="form-group mb-3">
+          <label class="form-label">Ism</label>
+          <input class="input" id="pName" value="${UI.escapeHtml(user.name)}" />
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label">Bio</label>
+          <textarea class="textarea" id="pBio" maxlength="200">${UI.escapeHtml(user.bio || '')}</textarea>
+        </div>
+        <div class="form-group mb-3">
+          <label class="form-label">Avatar</label>
+          <select class="select" id="pAvatar">
+            <option value="images/avatars/default.svg">Default</option>
+            <option value="images/avatars/avatar1.svg">Avatar 1</option>
+            <option value="images/avatars/avatar2.svg">Avatar 2</option>
+            <option value="images/avatars/avatar3.svg">Avatar 3</option>
+          </select>
+        </div>
+      `, (overlay) => {
+        const name = overlay.querySelector('#pName').value.trim();
+        const bio = overlay.querySelector('#pBio').value.trim();
+        const avatar = overlay.querySelector('#pAvatar').value;
+        if (!name) { UI.toast('Ism bo‘sh', 'error'); return; }
+        Profile.update({ name, bio, avatar });
+        overlay.remove();
+        UI.toast(t('profile.saved'), 'success');
+        render();
+      }, t('profile.save'));
+    };
+
+    render();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Natija — BIRGA</title>
+  <link rel="icon" href="images/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+  <style>
+    .result-wrap { max-width: 640px; margin: 0 auto; padding: 40px 16px; text-align: center; }
+    .score-circle {
+      width: 180px; height: 180px; margin: 20px auto 30px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 2.6rem; font-weight: 800;
+      background: radial-gradient(circle, rgba(121,87,255,.2), transparent 70%);
+      border: 3px solid var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+<div class="result-wrap">
+  <h1 data-i18n="quiz.result.title">Quiz natijasi</h1>
+  <div id="resultContent"></div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/validation.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/quiz.js"></script>
+<script src="js/challenge.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/polls.js"></script>
+<script src="js/stories.js"></script>
+<script src="js/community.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/sharing.js"></script>
+<script src="js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const r = Storage.get('last_result', null);
+    const c = document.getElementById('resultContent');
+    if (!r) {
+      c.innerHTML = `<div class="card"><p class="text-muted">Natija topilmadi</p><a class="btn btn-primary mt-4" href="quiz.html">Quizlar</a></div>`;
+      return;
+    }
+    const user = Auth.getCurrent();
+    const pct = Math.round((r.score / r.total) * 100);
+    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : pct >= 50 ? '👍' : '💪';
+    c.innerHTML = `
+      <div class="card">
+        <div style="font-size:3rem">${emoji}</div>
+        <div class="score-circle">${pct}%</div>
+        <h2 class="mb-2">${r.score} / ${r.total}</h2>
+        <p class="text-muted mb-4">${UI.escapeHtml(r.quizTitle)}</p>
+        <div class="grid grid-2 mb-6" style="gap:12px">
+          <div class="card" style="padding:16px">
+            <div class="text-muted" style="font-size:.85rem">${t('quiz.result.correct')}</div>
+            <h3 style="color:var(--success)">${r.score}</h3>
+          </div>
+          <div class="card" style="padding:16px">
+            <div class="text-muted" style="font-size:.85rem">${t('quiz.result.wrong')}</div>
+            <h3 style="color:var(--danger)">${r.total - r.score}</h3>
+          </div>
+        </div>
+        <div class="badge badge-success mb-6">+${r.xp} XP</div>
+
+        <div class="grid gap-2">
+          <button class="btn btn-primary" id="shareBtn">📤 ${t('quiz.result.share')}</button>
+          <a class="btn btn-secondary" href="quiz-play.html?id=${encodeURIComponent(r.quizId)}">🔄 ${t('quiz.result.again')}</a>
+          <a class="btn btn-ghost" href="quiz.html">← ${t('common.back')}</a>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('shareBtn').onclick = async () => {
+      const opts = {
+        userName: user?.username || 'player',
+        quizTitle: r.quizTitle,
+        score: r.score,
+        total: r.total,
+        xp: r.xp,
+      };
+      const url = Sharing.quizLink(r.quizId);
+      UI.modal(t('common.share'), `
+        <div class="grid gap-2">
+          <button class="btn btn-primary" data-act="card">🖼 ${t('quiz.result.share')} (rasm)</button>
+          <button class="btn btn-secondary" data-act="copy">📋 ${t('common.copy')}</button>
+          <button class="btn btn-secondary" data-act="tg">✈️ Telegram</button>
+          <button class="btn btn-secondary" data-act="native">📤 Web Share</button>
+        </div>
+      `, null).addEventListener('click', async (e) => {
+        const act = e.target.closest('[data-act]')?.getAttribute('data-act');
+        if (!act) return;
+        if (act === 'card') await Sharing.shareResultCard(opts);
+        if (act === 'copy') await Sharing.copy(url);
+        if (act === 'tg') Sharing.telegram(`Men "${r.quizTitle}" quizda ${r.score}/${r.total} ball oldim!`, url);
+        if (act === 'native') {
+          const ok = await Sharing.webShare({ title: 'BIRGA Result', text: `Score ${r.score}/${r.total}`, url });
+          if (!ok) Sharing.copy(url);
+        }
+      });
+    };
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+const CONFIG = {
+  APP_NAME: 'BIRGA',
+  VERSION: '1.0.0',
+  STORAGE_PREFIX: 'birga_',
+  DEFAULT_LANG: 'uz',
+  SUPPORTED_LANGS: ['uz', 'ru', 'en'],
+  DEFAULT_THEME: 'dark',
+  XP: {
+    QUIZ_CREATE: 50, QUIZ_COMPLETE: 30, QUIZ_PERFECT: 20,
+    CHALLENGE_COMPLETE: 40, BATTLE_WIN: 60, BATTLE_LOSE: 15,
+    POLL_VOTE: 5, POLL_CREATE: 25, STORY_POST: 15,
+    COMMUNITY_POST: 20, COMMUNITY_LIKE: 2, COMMUNITY_COMMENT: 8,
+    DAILY_LOGIN: 10,
+  },
+  LEVELS: [
+    { level: 1, xp: 0, name: 'Yangi' },
+    { level: 2, xp: 100, name: 'Boshlovchi' },
+    { level: 3, xp: 300, name: 'Faol' },
+    { level: 4, xp: 600, name: 'Tajribali' },
+    { level: 5, xp: 1000, name: 'Ustoz' },
+    { level: 6, xp: 1600, name: 'Ekspert' },
+    { level: 7, xp: 2400, name: 'Chempion' },
+    { level: 8, xp: 3400, name: 'Legenda' },
+    { level: 9, xp: 4600, name: 'Afsonaviy' },
+    { level: 10, xp: 6000, name: 'BIRGA Elite' },
+  ],
+  DEMO_USER: {
+    id: 'demo-user', name: 'Demo Foydalanuvchi', username: 'demo',
+    bio: 'BIRGA platformasining demo foydalanuvchisi',
+    avatar: 'images/avatars/default.svg',
+    xp: 320, level: 3, badges: ['first-quiz', 'active-user'],
+    joinedAt: new Date().toISOString(),
+  },
+};
+window.CONFIG = CONFIG;
